@@ -20,9 +20,12 @@ const Calculator = () => {
   const [activeValue, setActiveValue] = useState("");
 
   const handleActiveValue = (value: string) => {
+    const lastSegment = input.split(/[\+\-x\/]/).pop() || "";
+
     const lastChar = input.slice(-1);
     const isOperator = ["+", "-", "x", "/", "."].includes(value);
     const isLastCharOperator = ["+", "-", "x", "/", "."].includes(lastChar);
+    if (!isOperator && lastSegment.replace(".", "").length >= 10) return;
 
     if (!input && isOperator) return;
 
@@ -43,12 +46,18 @@ const Calculator = () => {
       setActiveOperator(value);
       return;
     }
-    if (showResult && !isOperator) {
-      setInput(value);
-      setShowResult(false);
-      setActiveValue(value);
-
-      setActiveOperator("");
+    if (showResult) {
+      if (isOperator) {
+        setInput(result + value);
+        setShowResult(false);
+        setActiveValue(value);
+        setActiveOperator(value);
+      } else {
+        setInput(value);
+        setShowResult(false);
+        setActiveValue(value);
+        setActiveOperator("");
+      }
       return;
     }
 
@@ -70,8 +79,9 @@ const Calculator = () => {
     if (/^[0-9.]+$/.test(input)) {
       const percentageResult = parseFloat(input) / 100;
       if (!isNaN(percentageResult)) {
-        setInput(percentageResult.toString());
-        setResult(percentageResult.toString());
+        const rounded = Number(percentageResult.toPrecision(10)).toString();
+        setInput(rounded);
+        setResult(rounded);
         setShowResult(true);
       }
       return;
@@ -107,9 +117,14 @@ const Calculator = () => {
     if (!hasValidOperator) return;
     try {
       const evalResult = eval(input.replace(/x/g, "*"));
+      const roundedResult =
+        typeof evalResult === "number"
+          ? Number(evalResult.toPrecision(10)).toString()
+          : evalResult.toString();
+
       const fullResult = `${input} = ${evalResult}`;
-      setInput(evalResult.toString());
-      setResult(evalResult.toString());
+      setInput(roundedResult);
+      setResult(roundedResult);
       setShowResult(true);
       setLastResult(fullResult);
       setShowLastExpression(false);
@@ -136,7 +151,7 @@ const Calculator = () => {
       }
     }
   };
-  const handleFirstRowClick = (name: string, value: string | JSX.Element) => {
+  const handleFirstRowClick = (name: string) => {
     const actions: Record<string, () => void> = {
       ac: handleAc,
       delete: handleDelete,
@@ -168,7 +183,7 @@ const Calculator = () => {
               isOperator={item.isOperator}
               isActive={activeValue === item.value}
               key={index}
-              onClick={() => handleFirstRowClick(item.name, item.value)}
+              onClick={() => handleFirstRowClick(item.name)}
             >
               {item.value}
             </Button>
