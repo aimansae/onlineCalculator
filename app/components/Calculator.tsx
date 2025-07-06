@@ -24,10 +24,8 @@ const Calculator = () => {
     const isOperator = ["+", "-", "x", "/", "."].includes(value);
     const isLastCharOperator = ["+", "-", "x", "/", "."].includes(lastChar);
 
-    // Don't allow operator as first input
     if (!input && isOperator) return;
 
-    // Disallow selecting a second operator if the expression already contains one
     const existingOperatorMatch = input.match(/[\+\-x\/]/g);
     if (
       isOperator &&
@@ -35,7 +33,7 @@ const Calculator = () => {
       existingOperatorMatch.length >= 1 &&
       isLastCharOperator === false
     ) {
-      return; // An operator exists and the last char is a number => block further operators
+      return;
     }
 
     // Replace last operator with new one
@@ -45,8 +43,6 @@ const Calculator = () => {
       setActiveOperator(value);
       return;
     }
-
-    // After result is shown and a number is clicked, reset input
     if (showResult && !isOperator) {
       setInput(value);
       setShowResult(false);
@@ -56,11 +52,11 @@ const Calculator = () => {
       return;
     }
 
-    // Append
     setInput((prev) => prev + value);
     setActiveOperator(isOperator ? value : "");
     setActiveValue(value);
   };
+
   const handleAc = () => {
     setInput("");
     setLastResult("");
@@ -68,10 +64,9 @@ const Calculator = () => {
     setShowResult(false);
     setActiveValue("");
   };
+
   const handlePercentage = () => {
     if (!input) return;
-
-    // Case 1: Single number like "6"
     if (/^[0-9.]+$/.test(input)) {
       const percentageResult = parseFloat(input) / 100;
       if (!isNaN(percentageResult)) {
@@ -81,8 +76,6 @@ const Calculator = () => {
       }
       return;
     }
-
-    // Case 2: Expression like "50+6"
     const match = input.match(/(.*?)([0-9.]+)$/);
     if (!match) return;
 
@@ -104,18 +97,20 @@ const Calculator = () => {
       setShowResult(true);
     }
   };
+
   const handleDelete = () => {
     setInput((prevInput) => prevInput.slice(0, -1));
   };
+
   const handleCalculateTotal = () => {
     const hasValidOperator = /[0-9]+[\+\-x\/%][0-9]+/.test(input);
     if (!hasValidOperator) return;
     try {
       const evalResult = eval(input.replace(/x/g, "*"));
       const fullResult = `${input} = ${evalResult}`;
-      setInput(evalResult.toString()); // 👈 Replace input with result
+      setInput(evalResult.toString());
       setResult(evalResult.toString());
-      setShowResult(true); // Display the result
+      setShowResult(true);
       setLastResult(fullResult);
       setShowLastExpression(false);
       localStorage.setItem("lastCalculation", fullResult);
@@ -124,7 +119,7 @@ const Calculator = () => {
       setShowResult(true);
     }
   };
-  console.log("result is", result);
+
   const handleShowLastCalculation = () => {
     const stored = localStorage.getItem("lastCalculation");
 
@@ -153,8 +148,6 @@ const Calculator = () => {
     const action = actions[name];
     if (action) action();
   };
-  // <div className="md:max-w-md h-full mx-auto md:mt-10 md:p-6 text-black bg-gray-100 shadow-md rounded-lg">
-
   return (
     <div className="md:max-w-96 md:mx-auto   md:h-full h-screen w-full flex gap-4 md:bg-gray-300 md:gap-2 flex-col text-black  md:items-center md:justify-center shadow-md rounded-lg p-4">
       <div className="w-fit mx-auto">
