@@ -1,26 +1,24 @@
 # Simple Calculator with [Next.js](https://nextjs.org) - [React](https://react.dev/)
 
 
+![Alt text](public/images/amIResponsive.png)
+
 ## This is modern and responsive calculator built using React, TypeScript, and Tailwind CSS. 
 
 This project is not just a tool for simple arithmetic—it's a reflection of my learning journey, where I explored concepts like state management, conditional rendering, styling logic, and edge case handling.
 
 ## Table of Contents
-- [Introduction](#-introduction)
-- [Live Site](#-live-site)
-- [What I Learned](#-what-i-learned)
-- [Challenges](#-challenges)
-- [Technologies Used](#-technologies-used)
-- [Repository Setup](#-repository-setup)
-- [Deployment on Vercel](#-deployment-on-vercel)
-- [File Structure](#-file-structure-key-parts)
-- [Future Features](#-future-features)
+- [Introduction](#introduction)
+- [Live Site](#live-site)
+- [What I Learned](#what-i-learned)
+- [Challenges](#challenges)
+- [Technologies Used](#technologies-used)
+- [Repository Setup](#repository-setup)
+- [Deployment on Vercel](#deployment-on-vercel)
+- [Future Features](#future-features)
 - [Credits](#-credits)
-- [Screenshots](#-screenshots)
-- [Contact](#-contact)
 
----
-
+ 
 
 ## Introduction
 This project started as a way to solidify my understanding of:
@@ -37,7 +35,7 @@ It mimics a real calculator, allowing users to:
 - Use percentage, delete, and reset options
 
 ## Live Site
-[🔗 View Live on Vercel](https://your-vercel-deployment-url.vercel.app)
+[🔗 View Live on Vercel](https://online-calculator-alpha.vercel.app/)
 
 ## What I Learned
 - Building clean and reusable components (`Button`)
@@ -61,7 +59,7 @@ These helped me better understand how to write readable logic and separate UI be
 - LocalStorage (for "Last" feature)
 
 
-## 📦 Repository Setup
+## Repository Setup
 
 ### Create GitHub Repository
 1. Go to [GitHub](https://github.com)
@@ -93,7 +91,7 @@ Your app will be live in seconds.
 - Scientific operations
 - Mobile gestures
 
-## 👏 Credits
-- [https://chatgpt.com/]() & StackOverflow for logic references
+## Credits
+- [Chat gpt](https://chatgpt.com/) & [StackOverflow](https://stackoverflow.com/) for logic references
 - TailwindCSS Docs
  - [Vercel](https://vercel.com/) for smooth deployment
