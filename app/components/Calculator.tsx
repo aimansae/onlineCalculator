@@ -17,6 +17,7 @@ const Calculator = () => {
   const [activeOperator, setActiveOperator] = useState("");
   const [lastResult, setLastResult] = useState("");
   const [showLastExpression, setShowLastExpression] = useState(false);
+  const [activeValue, setActiveValue] = useState("");
 
   const handleActiveValue = (value: string) => {
     const lastChar = input.slice(-1);
@@ -40,6 +41,7 @@ const Calculator = () => {
     // Replace last operator with new one
     if (isOperator && isLastCharOperator) {
       setInput((prev) => prev.slice(0, -1) + value);
+      setActiveValue(value);
       setActiveOperator(value);
       return;
     }
@@ -48,6 +50,8 @@ const Calculator = () => {
     if (showResult && !isOperator) {
       setInput(value);
       setShowResult(false);
+      setActiveValue(value);
+
       setActiveOperator("");
       return;
     }
@@ -55,12 +59,14 @@ const Calculator = () => {
     // Append
     setInput((prev) => prev + value);
     setActiveOperator(isOperator ? value : "");
+    setActiveValue(value);
   };
   const handleAc = () => {
     setInput("");
     setLastResult("");
     setResult("");
     setShowResult(false);
+    setActiveValue("");
   };
   const handlePercentage = () => {
     if (!input) return;
@@ -127,9 +133,9 @@ const Calculator = () => {
       if (expression && result) {
         setInput(expression);
         setResult(result);
-        setShowResult(false); // prevent triggering the "show result" block
+        setShowResult(false);
         setLastResult(stored);
-        setShowLastExpression(true); // 👈 mark that user clicked "Last"
+        setShowLastExpression(true);
       } else {
         setInput("");
       }
@@ -141,87 +147,90 @@ const Calculator = () => {
       delete: handleDelete,
       percentage: handlePercentage,
       divide: () => {
-        if (typeof value === "string") handleActiveValue(value);
+        handleActiveValue("/");
       },
     };
     const action = actions[name];
     if (action) action();
   };
-  return (
-    <div className="max-w-md mx-auto mt-10 p-6 text-black bg-gray-100 shadow-md rounded-lg">
-      <div className="mb-3 p-2   text-center items-center flex justify-end h-[4rem] border border-black">
-        {showLastExpression ? (
-          <div className="text-base text-gray-700 font-semibold">
-            {lastResult}
-          </div>
-        ) : showResult ? (
-          <div className="text-xl font-bold">{result}</div>
-        ) : (
-          <div className="text-xl font-bold">{input || "0"}</div>
-        )}
-      </div>
+  // <div className="md:max-w-md h-full mx-auto md:mt-10 md:p-6 text-black bg-gray-100 shadow-md rounded-lg">
 
-      {/*First row*/}
-      <div className="grid grid-cols-4 items-center justify-center gap-2">
-        {firstRowValues.map((item, index) => (
-          <Button
-            className={item.isOperator ? "bg-orange-500" : "bg-gray-300"}
-            key={index}
-            onClick={() => handleFirstRowClick(item.name, item.value)}
-          >
-            {item.value}
-          </Button>
-        ))}
-        {/*Second row*/}
-        {secondRowValues.map((item, index) => (
-          <Button
-            key={index}
-            value={item.value}
-            onClick={() => handleActiveValue(item.value)}
-            isActive={activeOperator === item.value}
-            isOperator={item.isOperator}
-          ></Button>
-        ))}
-        {/*Third row*/}
-        {thirdRowValues.map((item, index) => (
-          <Button
-            key={index}
-            value={item.value}
-            onClick={() => handleActiveValue(item.value)}
-            isActive={activeOperator === item.value}
-            isOperator={item.isOperator}
-          ></Button>
-        ))}
-        {/*Forth row*/}
-        {forthRowValues.map((item, index) => (
-          <Button
-            key={index}
-            value={item.value}
-            onClick={() => handleActiveValue(item.value)}
-            isActive={activeOperator === item.value}
-            isOperator={item.isOperator}
-          ></Button>
-        ))}
-        {/*Last row*/}
-        {fifthRowValues.map((item, index) => (
-          <Button
-            isOperator={item.isOperator}
-            key={index}
-            value={item.value}
-            onClick={() => {
-              if (item.value === "Last") {
-                handleShowLastCalculation();
-              } else if (item.value === "=") {
-                handleCalculateTotal();
-              } else {
-                handleActiveValue(item.value);
-              }
-            }}
-            isActive={activeOperator === item.value}
-          >
-            {item.value}
-          </Button>
-        ))}
+  return (
+    <div className="md:max-w-96 md:mx-auto   md:h-full h-screen w-full flex gap-4 md:bg-gray-300 md:gap-2 flex-col text-black  md:items-center md:justify-center shadow-md rounded-lg p-4">
+      <div className="w-fit mx-auto">
+        <div className="flex justify-end  bg-white/80 text-black font-bold text-3xl  p-4 my-2 border border-gray-200   ">
+          {showLastExpression ? (
+            <div className="  text-gray-700 font-semibold ">{lastResult}</div>
+          ) : showResult ? (
+            <div className=" ">{result}</div>
+          ) : (
+            <div className=" ">{input || "0"}</div>
+          )}
+        </div>
+
+        {/*First row*/}
+        <div className="h-full grid grid-cols-4 items-center justify-center gap-2">
+          {firstRowValues.map((item, index) => (
+            <Button
+              isOperator={item.isOperator}
+              isActive={activeValue === item.value}
+              key={index}
+              onClick={() => handleFirstRowClick(item.name, item.value)}
+            >
+              {item.value}
+            </Button>
+          ))}
+          {/*Second row*/}
+          {secondRowValues.map((item, index) => (
+            <Button
+              key={index}
+              value={item.value}
+              onClick={() => handleActiveValue(item.value)}
+              isActive={activeValue === item.value}
+              isOperator={item.isOperator}
+            ></Button>
+          ))}
+          {/*Third row*/}
+          {thirdRowValues.map((item, index) => (
+            <Button
+              key={index}
+              value={item.value}
+              onClick={() => handleActiveValue(item.value)}
+              isActive={activeValue === item.value}
+              isOperator={item.isOperator}
+            ></Button>
+          ))}
+          {/*Forth row*/}
+          {forthRowValues.map((item, index) => (
+            <Button
+              key={index}
+              value={item.value}
+              onClick={() => handleActiveValue(item.value)}
+              isActive={activeOperator === item.value}
+              isOperator={item.isOperator}
+            ></Button>
+          ))}
+          {/*Last row*/}
+          {fifthRowValues.map((item, index) => (
+            <Button
+              isOperator={item.isOperator}
+              key={index}
+              value={item.value}
+              onClick={() => {
+                if (item.value === "Last") {
+                  handleShowLastCalculation();
+                } else if (item.value === "=") {
+                  handleCalculateTotal();
+                } else {
+                  handleActiveValue(item.value);
+                }
+              }}
+              isActive={activeOperator === item.value}
+            >
+              {item.value}
+            </Button>
+          ))}
+        </div>
       </div>
     </div>
   );

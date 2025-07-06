@@ -2,7 +2,7 @@ import { FiDelete } from "react-icons/fi";
 
 export const firstRowValues = [
   { name: "ac", value: "AC" },
-  { name: "delete", value: <FiDelete size={22} /> },
+  { name: "delete", value: <FiDelete size={20} /> },
   { name: "percentage", value: "%" },
   { name: "divide", value: "/", isOperator: true },
 ];
@@ -27,6 +27,6 @@ export const forthRowValues = [
 export const fifthRowValues = [
   { value: "0" },
   { value: "." },
-  { value: "Last" },
+  { value: "Prev" },
   { value: "=", isOperator: true },
 ];

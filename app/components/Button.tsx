@@ -15,19 +15,23 @@ const Button = ({
   children,
   isOperator,
 }: ButtonProps) => {
+  const numericActiveClass =
+    !isOperator && isActive ? "bg-gray-500 text-white" : "";
+
+  const numericDefaultClass =
+    !isOperator && !isActive ? "bg-white hover:bg-gray-400 text-black" : "";
+
+  const operatorClass = isOperator
+    ? isActive
+      ? "bg-red-400 text-white"
+      : "bg-orange-500 hover:bg-orange-400 font-bold text-black"
+    : "";
   return (
     <button
-      className={`border rounded-full p-4 text-center ${className}  
-     ${
-       isOperator
-         ? isActive
-           ? "bg-orange-400/80 text-white" // lighter orange for active
-           : "bg-orange-500 hover:bg-orange-400/80 text-black"
-         : ""
-     }
-    ${!isOperator && isActive ? "bg-orange-500 text-black" : ""}
-    ${!isOperator && !isActive ? "bg-white hover:bg-gray-300  " : ""}
-  `}
+      className={`flex items-center justify-center w-16 h-16 rounded-full text-xl    ${className}
+        ${operatorClass}
+        ${numericActiveClass}
+        ${numericDefaultClass}`}
       onClick={onClick}
       value={value}
     >
